@@ -1,0 +1,12 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "NodeNext",
+    "types": ["pinia", "nuxt"],
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "pinia": ["node_modules/pinia/dist/pinia.mjs"]
+    }
+  }
+}
