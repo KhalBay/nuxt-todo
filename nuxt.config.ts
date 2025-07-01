@@ -25,5 +25,12 @@ export default defineNuxtConfig({
     output: {
       publicDir: 'docs'
     }
+  },
+  hooks: {
+    'nitro:config'(config) {
+      if (config.prerender?.routes) {
+        config.prerender.routes.push('/')
+      }
+    }
   }
 })
