@@ -1,19 +1,27 @@
 <template>
   <div class="task-block" @click="navigateToTask">
-    <div
+    <nuxt-img
         class="status"
-        :class="task.isDone ? 'done' : 'undone'"
+        :src="task.isDone ? './checked.svg' : './check.svg'"
         @click.stop="$emit('toggle')"
     />
     <div class="info">
-      <div :class="{'closed': task.isDone}">{{ task.title }}</div>
-      <div class="date">
-        <div>
-          Дата создания: <p>{{ taskStore.formatDate(task.createdAt) }}</p>
+      <div class="info-block">
+        <div class="info-title" :class="{'closed': task.isDone}">{{ task.title }}</div>
+        <div class="info-date">
+          <div>
+            Дата создания: <p>{{ taskStore.formatDate(task.createdAt) }}</p>
+          </div>
+          <div>
+            Дата окончания: <p>{{ taskStore.formatDate(task.endDate) }}</p>
+          </div>
         </div>
-        <div>
-          Дата окончания: <p>{{ taskStore.formatDate(task.endDate) }}</p>
-        </div>
+      </div>
+      <div
+          class="description"
+          :class="{'closed': task.isDone}"
+      >
+        {{ task.description }}
       </div>
     </div>
     <div class="task-block-buttons">
@@ -30,13 +38,6 @@
         <nuxt-img src="./trash.svg"/>
       </button>
     </div>
-    <div
-        class="description"
-        :class="{'closed': task.isDone}"
-    >
-      {{ task.description }}
-    </div>
-<!--    <NuxtLink :to="`/tasks/${task.id}`">Подробнее</NuxtLink>-->
   </div>
 </template>
 
@@ -53,7 +54,6 @@ const emit = defineEmits(['edit', 'delete'])
 const editTask = () => emit('edit', props.task.id)
 const deleteTask = () => emit('delete', props.task.id)
 
-
 const navigateToTask = () => {
   navigateTo(`/tasks/${props.task.id}`)
 }
@@ -61,86 +61,70 @@ const navigateToTask = () => {
 
 <style lang="scss" scoped>
 .task-block {
-  background: #262626;
+  background: $bg-task-color;
   border-radius: 8px;
-  border: 1px solid #333333;
+  border: 1px solid $border-color;
   padding: 16px;
-  display: grid;
-  align-items: center;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
   cursor: pointer;
+  display: flex;
+  gap: 12px;
 
   .status {
-    grid-area: 1 / 1 / 2 / 2;
-    justify-self: center;
-    width: 17px;
-    height: 17px;
-    border-radius: 20px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-
-    &.undone {
-      border: 2px solid #4EA8DE;
-    }
-
-    &.done {
-      border: 2px solid #5E60CE;
-      background: #5E60CE;
-      position: relative;
-
-      &::before {
-        content: 'L';
-        position: absolute;
-        transform: scale(-1, 1) rotate(315deg);
-        left: 6px;
-        bottom: 0;
-        font-size: 14px;
-      }
-    }
   }
-
   .info {
-    grid-area: 1 / 2 / 2 / 12;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
     font-weight: 700;
     font-size: 20px;
+    // Это может конечно ошибка но в дизайне высота блока 101, при этом блок текста не совсем корретно вписан
+    // в блок карточки, но если нет то 101px высота внутренностей
+    min-height: 101px;
 
-
-    .date {
+    &-block {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &-title {
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 140%;
+    }
+    &-date {
       display: flex;
       flex-direction: column;
       font-size: 10px;
-      color: #808080;
+      color: $disabled-color;
 
       div {
         display: flex;
-        flex-wrap: nowrap;
-        gap: 5px;
+        gap: 2px;
         justify-content: space-between;
       }
-
       p {
         margin: 0;
-        color: #1E6F9F;
+        color: $bg-button-color;
       }
     }
   }
-
   .task-block-buttons {
-    grid-area: 1 / 12 / 2 / 13;
     display: flex;
+    align-items: flex-start;
+    gap: 2px;
   }
   .description {
-    grid-area: 2 / 2 / 3 / 11;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
   }
-
   .closed {
     text-decoration: line-through;
   }
-
   .button-ico {
     background: none;
     padding: 0;

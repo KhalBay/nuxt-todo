@@ -8,7 +8,7 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: system-ui;
-  background: #1A1A1A;
+  font-family: "Inter";
+  background: $bg-color;
 }
 </style>

@@ -7,12 +7,14 @@
   >
     <span class="button-content">
       <slot></slot>
-      <span v-if="withPlus" class="plus-icon">+</span>
+      <NuxtImg v-if="withPlus" class="plus-icon" src="./plus.svg"/>
     </span>
   </button>
 </template>
 
 <script setup lang="ts">
+import {Popover} from "v-calendar";
+
 defineEmits(['click'])
 
 withDefaults(defineProps<{
@@ -26,15 +28,10 @@ withDefaults(defineProps<{
 
 <style lang="scss" scoped>
 .button {
-  --bg-color: #1E6F9F;
-  --hover-color: #8284FA;
-  --text-color: #F2F2F2;
-  --disabled-color: #808080;
-
   width: 100%;
   height: 52px;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: $bg-button-color;
+  color: $text-color;
   border-radius: 8px;
   border: none;
   outline: none;
@@ -45,31 +42,21 @@ withDefaults(defineProps<{
   transition: all 0.2s ease;
   position: relative;
 
-  &:hover:not(.button--disabled) {
-    background: var(--hover-color);
+  .plus-icon {
+    width: 16px;
+    height: 16px;
   }
-
+  &:hover:not(.button--disabled) {
+    background: $hover-color;
+  }
   &-content {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
   }
-
-  .plus-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    border: 1px solid currentColor;
-    border-radius: 50%;
-    font-size: 0.8em;
-    margin-left: 8px;
-  }
-
   &--disabled {
-    background: var(--disabled-color);
+    background: $disabled-color;
     cursor: not-allowed;
     opacity: 0.7;
   }

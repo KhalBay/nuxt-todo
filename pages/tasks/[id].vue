@@ -1,5 +1,5 @@
 <template>
-  <div class="task-detail">
+  <div class="task-detail" v-if="task">
     <nav>
       <NuxtLink to="/">Главная</NuxtLink> / {{task?.title}}
     </nav>
@@ -20,36 +20,26 @@
 
 <script setup lang="ts">
 import { useTaskStore } from '~/stores/useTaskStore'
-import { api } from '~/api'
+import { onMounted } from "vue";
 
 const route = useRoute()
 const taskStore = useTaskStore()
 
-
-const { data: task } = await useAsyncData(
-    `task-${route.params.id}`,
-    async () => {
-      const storeTask = taskStore.getTaskById(Number(route.params.id))
-      if (storeTask) return storeTask
-
-      try {
-        const { data } = await api.task.getById(Number(route.params.id))
-        return data
-      } catch (error) {
-        throw createError({ statusCode: 404, statusMessage: 'Task Not Found' })
-      }
-    }
-)
-
-if (!task.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Task Not Found' })
-}
+const task = computed(() => taskStore.currentTask)
 
 useServerSeoMeta({
   title: () => task.value?.title || 'Задача',
   ogTitle: () => task.value?.title || 'Задача',
   description: () => task.value?.description || 'Описание задачи',
   ogDescription: () => task.value?.description || 'Описание задачи'
+})
+
+onMounted(async () => {
+  try {
+    await taskStore.fetchTaskById(Number(route.params.id))
+  } catch (error) {
+    throw createError({ statusCode: 404, statusMessage: 'Task Not Found' })
+  }
 })
 </script>
 
@@ -62,19 +52,19 @@ useServerSeoMeta({
   nav {
     cursor: default;
     margin: 0 0 8px 0;
-    color: #808080;
+    color: $disabled-color;
 
     a {
-      color: #808080;
+      color: $disabled-color;
       text-decoration: none;
     }
   }
 
   .info-block {
-    border: 1px solid #333333;
+    border: 1px solid $border-color;
     border-radius: 8px;
-    background: #262626;
-    color: #F2F2F2;
+    background: $bg-task-color;
+    color: $text-color;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -97,19 +87,18 @@ useServerSeoMeta({
     display: flex;
     flex-direction: column;
     font-size: 10px;
-    color: #808080;
-    width: 20%;
+    color: $disabled-color;
+    width: max-content;
 
     div {
       display: flex;
-      flex-wrap: nowrap;
-      gap: 5px;
+      gap: 2px;
       justify-content: space-between;
     }
 
     p {
       margin: 0;
-      color: #1E6F9F;
+      color: $bg-button-color;
     }
   }
 }

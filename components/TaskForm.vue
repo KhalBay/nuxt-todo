@@ -25,7 +25,7 @@
       </span>
     </div>
 
-    <div>
+    <div class="calendar">
       <DatePicker
           v-model="form.endDate"
           mode="date"
@@ -45,6 +45,7 @@
               @blur="v$.endDate.$touch"
               class="custom-date-input"
           />
+          <nuxt-img src="./calendar.svg" class="calendar-ico"/>
         </template>
       </DatePicker>
 
@@ -69,7 +70,6 @@ import { required, minLength, helpers } from '@vuelidate/validators'
 import { DatePicker } from 'v-calendar'
 import type { Task } from "~/types/task"
 import 'v-calendar/style.css'
-
 
 const props = defineProps<{
   task?: Task
@@ -120,68 +120,104 @@ const submitForm = async () => {
 .task-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 500px;
+  gap: 10px;
 
   .form-group {
     display: flex;
     flex-direction: column;
   }
-
   .error {
-    color: #E25858;
-    font-size: 0.8rem;
+    color: $error-color;
+    margin: 2px 0 0 0;
+    font-size: 10px;
   }
-
   .title {
     font-weight: 700;
     font-size: 20px;
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
   }
-
   input {
-    background: #262626;
+    background: $bg-task-color;
     height: 38px;
-    border: 1px solid #0D0D0D;
+    border: 1px solid $bg-header-color;
     padding: 9px 16px;
     color: white;
     font-size: 14px;
     border-radius: 8px;
     box-sizing: border-box;
   }
-
   .custom-date-input {
     width: 100%;
   }
+  .calendar {
+    position: relative;
 
+    &-ico {
+      position: absolute;
+      top: 9px;
+      right: 16px;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
 
-  :deep(.vc-container) {
-    --vc-bg: #1E1E1E;
-    --vc-text: #FFFFFF;
-    --vc-accent-50: #812020;
-    --vc-border: 1px solid #1E1E1E;
-    --vc-rounded: 8px;
-    --vc-gray-700: #1E1E1E;
-    --vc-header-arrow-color: none;
-  }
-
-  :deep(.vc-title) {
-    background: none;
-    color: #ADADAD;
-  }
-  :deep(.vc-nav-container) {
-    background: #1E1E1E;
-    color: #ADADAD;
-  }
-  :deep(.vc-header .vc-arrow) {
-    background: none;
-    color: #ADADAD;
-  }
-  :deep(.vc-weekday) {
-    color: #ADADAD;
-  }
-  :deep(.vc-dark .vc-attr) {
-    --vc-highlight-solid-bg: #8284FA;
+    // Стили для календаря
+    :deep(.vc-container) {
+      --vc-bg: $bg-calendar;
+      --vc-text: white;
+      --vc-accent-50: $calendar-accent;
+      --vc-border: 1px solid $bg-calendar;
+      --vc-rounded: 8px;
+      --vc-gray-700: $bg-calendar;
+      --vc-header-arrow-color: none;
+    }
+    :deep(.vc-title) {
+      background: none;
+      color: $calendar-text;
+    }
+    :deep(.vc-nav-container) {
+      background: $bg-calendar;
+      color: $calendar-text;
+    }
+    :deep(.vc-header .vc-arrow) {
+      background: none;
+      color: $calendar-text;
+    }
+    :deep(.vc-weekday) {
+      color: $calendar-text;
+    }
+    :deep(.vc-dark .vc-attr) {
+      --vc-highlight-solid-bg: $hover-color;
+    }
+    :deep(.vc-monthly .is-not-in-month *) {
+      opacity: .4;
+    }
+    :deep(.vc-day) {
+      min-height: 35px;
+      min-width: 35px;
+    }
+    :deep(.vc-nav-arrow) {
+      background: none;
+    }
+    :deep(.vc-nav-title) {
+      background: none;
+    }
+    :deep(.vc-nav-item) {
+      background: none;
+      color: $disabled-color;
+    }
+    :deep(.vc-popover-content.direction-bottom) {
+      background: #1E1E1E;
+    }
+    :deep(.vc-nav-item.is-active) {
+      color: $text-color;
+    }
+    :deep(.vc-weekdays) {
+      gap: 5px;
+    }
+    :deep(.vc-week) {
+      gap: 5px;
+    }
   }
 }
 </style>

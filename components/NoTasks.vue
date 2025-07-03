@@ -18,17 +18,19 @@
   flex-direction: column;
   align-items: center;
   padding: 64px 24px;
-  border-top: 1px solid #333333;
+  border-top: 1px solid $border-color;
   border-radius: 8px;
 
   &-img {
+    width: 56px;
     height: 56px;
     margin: 0 0 16px 0;
   }
 
   &-text {
     text-align: center;
-    color: #808080;
+    color: $disabled-color;
+    margin: 0;
   }
 }
 

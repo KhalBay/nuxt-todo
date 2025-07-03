@@ -1,7 +1,9 @@
 <template>
   <div class="layout">
     <header class="header">
-      <nuxt-img src="/logo.svg" alt="Логотип" class="logo" />
+      <NuxtLink to="/">
+        <nuxt-img src="/logo.svg" alt="Логотип" class="logo" />
+      </NuxtLink>
     </header>
 
     <main class="main">
@@ -15,9 +17,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-sizing: border-box;
 
   .header {
-    background: #0D0D0D;
+    background: $bg-header-color;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,6 +35,12 @@
     display: flex;
     justify-content: center;
     color: white;
+  }
+}
+
+@media (max-width: 750px) {
+  .main {
+    margin: 0 16px;
   }
 }
 </style>
